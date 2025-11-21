@@ -1,0 +1,238 @@
+/*PARTE TEORICA (4 puntos):
+1)
+Describa con sus palabras que es una clase en la Programación Orientada a Objetos. Describir 2 ejemplos.
+*/
+/*RTA:
+Una clase es un molde que define las caracteristicas y comportamientos del objeto a crear en cuestion.
+Por ejemplo, una clase Perro puede tener atributos como raza, color y edad, y metodos como ladrar y correr.
+Otra clase puede ser Coche, con atributos como marca, modelo y año, y metodos como acelerar y frenar.
+*/
+
+/*2) ¿A que hace referencia la sobrecarga de métodos?  Detallar un ejemplo de uso. 
+*/
+/*RTA:
+La sobrecarga de métodos se refiere a definir múltiples métodos con el mismo nombre pero con diferentes firmas dentro de la misma clase. Esto permite que un método pueda comportarse de manera diferente según los argumentos que se le pasen.
+Por ejemplo, en una clase Calculadora, podríamos tener un método llamado Sumar que acepte dos enteros, otro que acepte dos números de punto float y otro que acepte una lista de enteros.
+*/
+
+/*3) Relacionar de manera lógica y jerárquica donde se podría emplear la herencia y las asociaciones de las siguientes clases (Puede ser de utilidad realizar un diagrama de clases para verlo más claro) y nombrar al menos dos métodos para cada superclase:
+vehiculo,nootebook,rueda,auto,computadora,AutoElectrico,PC,Aillone,chasis,VehiculoAcuatico.
+*/
+/*RTA:
+Vehiculo (moverse(), detenerse())
+Auto: Vehiculo 
+AutoElectrico: Auto 
+VehiculoAcuatico: Vehiculo 
+Rueda 
+Chasis 
+Asociacion: Auto tiene Ruedas y Chasis
+
+
+Computadora (encender(), apagar())
+Notebook: Computadora 
+PC: Computadora 
+Aillone: PC 
+*/
+
+/*PARTE PRACTICA (6 puntos):
+
+Se requiere un sistema que nos permita administrar la información de los integrantes de una empresa.
+La empresa que requiere el desarrollo es un unicornio latinoamericano que comenzó desde un MVP y logró conseguir inversores los cuales requieren mayor exigencia respecto a los controles de la empresa. Su requerimiento es una base de datos de integrantes para después dar lugar a asentar aquí la liquidación de sueldos y asistencias para empleados, control de finanzas de inversores, etc.
+Hay tres principales tipos de integrantes: Técnico, GerenteTech e Inversores. 
+De todos ellos se necesita registrar su nombre y apellido. 
+Además, para los técnicos se requiere ingresar su especialidad (programador o tester) y el lenguaje principal de trabajo (string).
+Para los GerenteTech se debe registrar la ubicación (país, al ser multinacional) y cantidad de áreas a cargo.
+Para los Inversores se debe registrar el monto que invirtió y proyecto de interés.
+
+La empresa actualmente cuenta con 7 empleados y 3 inversores, los cuales debemos ingresar a nuestro sistema y debe permite la lectura de todos los integrantes. 
+
+*/ 
+/*
+Extra para el 10: Mostrar en pantalla la sumatoria de los fondos que lograron recibir de los inversores.*/
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Name
+{
+  class Program
+  {
+   static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
+
+            //7 empleados y 3 inversores
+
+            Integrante[] empleados = new Integrante[10];
+
+            empleados[0] = new Tecnico("pepe", "grillo", true, "C#");
+            empleados[1] = new Tecnico("pepe2", "grillo1", false, "C++");
+            empleados[2] = new Tecnico("pepe2", "grillo2", true, "F#");
+            empleados[3] = new GerenteTech("techie", "grillo", "Argentina", 3);
+            empleados[4] = new GerenteTech("techie1", "grillo", "Venezuela", 5);
+            empleados[5] = new Tecnico("hola", "pepe", true, "Pascal");
+            empleados[9] = new Tecnico("hola", "pepito", false, "Javascript del mal");
+            empleados[6] = new Inversor("bill", "gates", 10000f, "pfizer");
+            empleados[7] = new Inversor("Linus", "torvalds", 1000f, "bien del mundo");
+            empleados[8] = new Inversor("Richard", "Stallman", 100f, "sustentabilidad");
+
+            // 5 tecnicos, 2 gerentes y 3 inversores
+            foreach(Integrante integrantito in empleados)
+            {
+                integrantito.mostrarInfo();
+                Console.WriteLine();
+            }
+
+            //for(int i = 0; i < empleados.Length; i++)
+            //{
+            //    empleados[i].mostrarInfo();
+            //}
+
+
+            //10: Mostrar en pantalla la sumatoria de los fondos que lograron recibir de los inversores.
+
+            float montoRecaudado = 0;
+
+
+            Inversor[] inversores = new Inversor[3];
+            inversores[0] = (Inversor)empleados[6];
+            inversores[1] = (Inversor)empleados[7];
+            inversores[2] = (Inversor)empleados[8];
+
+            Inversor[] inversoritos = new Inversor[] {
+                new Inversor("bill", "gates", 10000f, "pfizer"),
+                new Inversor("Linus", "torvalds", 1000f, "bien del mundo"),
+                new Inversor("Richard", "Stallman", 100f, "sustentabilidad")
+        };
+
+            foreach(Inversor inv in inversores)
+            {
+                montoRecaudado = montoRecaudado + inv.getMonto();
+            }
+
+            Console.WriteLine("El monto recaudado de los inversores es: "+ montoRecaudado);
+
+
+
+            float montoRecaudado1 = 0;
+
+            foreach (Integrante integrantito in empleados)
+            {
+                // si es inversor y se asigna una variable temporal dentro de la clase
+                if (integrantito is Inversor a)
+                {
+                    montoRecaudado1 = montoRecaudado1 + a.getMonto();
+                }
+               
+            }
+
+            Console.WriteLine("El monto recaudado de los inversores es: " + montoRecaudado1);
+
+
+        }
+  }
+  //clases 
+  internal class Integrante
+    {
+        public string nombre;
+        public string apellido;
+
+        // dos constructores de BUENA PRACTICA
+        public Integrante() { }
+
+        public Integrante(string nombre, string apellido)
+        {
+            this.nombre = nombre;
+            this.apellido = apellido;
+        }
+
+        public virtual void mostrarInfo()
+        {
+            Console.WriteLine("El nombre es: "+ this.nombre+" y el apellido: "+ this.apellido);
+        }
+    }
+
+        internal class GerenteTech : Integrante
+    {
+        public string ubicacion;
+        public int cantidadAreas;
+
+
+        //GerenteTech la ubicación y cantidad de áreas a cargo.
+
+        public GerenteTech(): base() { }
+
+        public GerenteTech(string nombre, string apellido, string ubicacion, int cantidadAreas): base(nombre, apellido)
+        {
+            this.ubicacion = ubicacion;
+            this.cantidadAreas = cantidadAreas;
+        }
+
+
+        public override void mostrarInfo()
+        {
+            base.mostrarInfo();
+            Console.WriteLine("el pais de ubicacion es: "+ this.ubicacion+" y la cantidad de areas a cargo: "+ this.cantidadAreas);
+        }
+    }
+
+    internal class Inversor : Integrante
+    {
+        public float monto;
+        public string proyectoInteres;
+
+        public Inversor() : base() { }
+
+        public Inversor(string nombre, string apellido, float monto, string proyectoInteres): base(nombre, apellido)
+        {
+            this.monto = monto;
+            this.proyectoInteres = proyectoInteres;
+
+        }
+
+        public override void mostrarInfo()
+        {
+            base.mostrarInfo();
+            Console.WriteLine("El monto invertido es: "+ this.monto+" y el proyecto de interes es: "+this.proyectoInteres);
+        }
+
+        public float getMonto()
+        {
+            return this.monto;
+        }
+
+    }
+
+        internal class Tecnico : Integrante
+    {
+        public bool especialidad;
+        public string lenguaje;
+
+        public Tecnico() : base() { }
+
+        public Tecnico(string nombre, string apellido, bool especialidad, string lenguaje): base(nombre, apellido)
+        {
+            this.especialidad = especialidad;
+            this.lenguaje = lenguaje;
+        }
+
+
+        public override void mostrarInfo()
+        {
+            base.mostrarInfo();
+            if (this.especialidad)
+            {
+                Console.WriteLine(" la especialidad es PROGRAMADOR.");
+            }
+            else
+            {
+                Console.WriteLine(" la especialida des TESTER.");
+            }
+
+            Console.WriteLine("El lenguaje principal es: " + this.lenguaje);
+            
+        }
+    }
+}
